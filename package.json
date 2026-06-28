@@ -1,0 +1,16 @@
+{
+  "name": "gym-management-system-prototype",
+  "version": "1.0.0",
+  "description": "Dependency-free full-stack gym management prototype with Node.js, JSON storage, and browser UI.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "gym",
+    "management",
+    "prototype"
+  ],
+  "author": "",
+  "license": "MIT"
+}

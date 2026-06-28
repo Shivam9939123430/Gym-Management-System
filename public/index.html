@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gym Management System</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">FM</div>
+          <div>
+            <strong>FitMatrix</strong>
+            <span>Gym Operations</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <button class="active" data-view="dashboard">Dashboard</button>
+          <button data-view="members">Members</button>
+          <button data-view="billing">Billing</button>
+          <button data-view="attendance">Attendance</button>
+          <button data-view="classes">Classes</button>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <h1>Gym Management System</h1>
+          </div>
+          <div class="search-wrap">
+            <span>Search</span>
+            <input id="search" type="search" placeholder="Name, phone, goal">
+          </div>
+        </header>
+
+        <section class="view active" id="dashboard">
+          <div class="metrics">
+            <article><span>Active members</span><strong id="activeMembers">0</strong></article>
+            <article><span>Payment due</span><strong id="dueMembers">0</strong></article>
+            <article><span>Visits today</span><strong id="todayVisits">0</strong></article>
+            <article><span>Total revenue</span><strong id="revenue">₹0</strong></article>
+          </div>
+
+          <div class="panel-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <h2>Recently Joined</h2>
+                <button data-view-target="members">Manage</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Name</th><th>Plan</th><th>Status</th><th>Expires</th></tr></thead>
+                  <tbody id="recentMembers"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <h2>Today’s Check-ins</h2>
+                <button data-view-target="attendance">Add</button>
+              </div>
+              <div id="todayAttendance" class="activity-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="members">
+          <div class="split">
+            <form id="memberForm" class="panel form-panel">
+              <div class="panel-head">
+                <h2 id="memberFormTitle">Add Member</h2>
+                <button type="button" id="resetMemberForm">Clear</button>
+              </div>
+              <input type="hidden" name="id">
+              <label>Name<input name="name" required placeholder="Member name"></label>
+              <label>Phone<input name="phone" required placeholder="10 digit phone"></label>
+              <label>Email<input name="email" type="email" placeholder="email@example.com"></label>
+              <div class="two">
+                <label>Plan<select name="planId" required></select></label>
+                <label>Trainer<select name="trainerId"></select></label>
+              </div>
+              <div class="two">
+                <label>Joined<input name="joinedAt" type="date"></label>
+                <label>Expires<input name="expiresAt" type="date"></label>
+              </div>
+              <div class="two">
+                <label>Status<select name="status"><option>active</option><option>due</option><option>paused</option></select></label>
+                <label>Goal<input name="goal" placeholder="Weight loss, strength"></label>
+              </div>
+              <button class="primary" type="submit">Save Member</button>
+            </form>
+
+            <section class="panel">
+              <div class="panel-head"><h2>Member Directory</h2><span id="memberCount">0 members</span></div>
+              <div id="memberCards" class="cards"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="billing">
+          <div class="split">
+            <form id="paymentForm" class="panel form-panel">
+              <div class="panel-head"><h2>Record Payment</h2></div>
+              <label>Member<select name="memberId" required></select></label>
+              <div class="two">
+                <label>Amount<input name="amount" type="number" min="1" required placeholder="2499"></label>
+                <label>Method<select name="method"><option>UPI</option><option>Cash</option><option>Card</option><option>Bank Transfer</option></select></label>
+              </div>
+              <label>Fee Type<select name="feeType"><option value="new">New Admission</option><option value="renewal">Renewal</option></select></label>
+              <label>Paid on<input name="paidAt" type="date"></label>
+              <label>Note<input name="note" placeholder="Monthly renewal"></label>
+              <button class="primary" type="submit">Add Payment</button>
+            </form>
+            <section class="panel">
+              <div class="panel-head"><h2>Monthly Collection</h2><strong id="selectedMonthTotal">Rs 0</strong></div>
+              <label>Month<select id="collectionMonth"></select></label>
+              <div class="collection-split">
+                <article><span>New admissions</span><strong id="newCollection">Rs 0</strong></article>
+                <article><span>Renewals</span><strong id="renewalCollection">Rs 0</strong></article>
+              </div>
+              <div id="monthlyCollection" class="month-grid"></div>
+            </section>
+          </div>
+          <section class="panel ledger-panel">
+            <div class="panel-head"><h2>Payment Ledger</h2></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Member</th><th>Amount</th><th>Type</th><th>Method</th><th>Date</th></tr></thead>
+                  <tbody id="paymentsTable"></tbody>
+                </table>
+              </div>
+          </section>
+        </section>
+
+        <section class="view" id="attendance">
+          <div class="split">
+            <form id="attendanceForm" class="panel form-panel">
+              <div class="panel-head"><h2>Check In</h2></div>
+              <label>Member<select name="memberId" required></select></label>
+              <div class="two">
+                <label>Date<input name="date" type="date"></label>
+                <label>Time<input name="checkIn" type="time"></label>
+              </div>
+              <button class="primary" type="submit">Mark Attendance</button>
+            </form>
+            <section class="panel">
+              <div class="panel-head"><h2>Attendance Log</h2></div>
+              <div id="attendanceLog" class="activity-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="classes">
+          <div class="panel">
+            <div class="panel-head"><h2>Plans, Trainers & Classes</h2></div>
+            <div class="catalog" id="catalog"></div>
+          </div>
+        </section>
+
+        <footer class="site-footer">
+          <strong>Shivam Bharti</strong>
+          <span>6299226105</span>
+          <a href="mailto:shivambharti9939@gmail.com">shivambharti9939@gmail.com</a>
+          <span>Copyright © 2026 Shivam Bharti. All rights reserved.</span>
+        </footer>
+      </main>
+    </div>
+
+    <div id="toast" role="status"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
